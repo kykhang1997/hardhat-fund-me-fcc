@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Fund Me App</title>
+	</head>
+	<body>
+		Hey whats go?
+		<br />
+		<div>
+			<button id="connectButton" onclick="connect()">Connect</button>
+			<button id="balanceButton" onclick="getBalance()">
+				Get Balance
+			</button>
+			<button id="withdrawButton" onclick="withdraw()">Withdraw</button>
+		</div>
+		<br />
+		<div>
+			<label id="account"></label>
+			<br />
+			<label id="balance"></label>
+		</div>
+		<br />
+		<div>
+			<label for="fund">ETH amount</label>
+			<input id="ethAmount" placeholder="0.1" type="number" />
+			<button id="fundButton" onclick="fund()">Fund</button>
+		</div>
+
+		<script src="./index.js" type="module"></script>
+	</body>
+</html>
