@@ -4,6 +4,7 @@ pragma solidity ^0.8.19;
 //? import
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 import "./PriceConverter.sol";
+import "hardhat/console.sol";
 //? Error codes
 error FundMe__NotOwner();
 
@@ -21,12 +22,12 @@ contract FundMe {
     // State Variables!
     mapping(address => uint256) public s_addressToAmountFunded;
     address[] public s_funders;
-    address public immutable s_owner;
+    address public immutable i_owner;
     uint256 public MINIMUM_USD = 50 * 1e8;
     AggregatorV3Interface public s_priceFeed;
 
     modifier onlyOwner() {
-        if (msg.sender != s_owner) revert FundMe__NotOwner();
+        if (msg.sender != i_owner) revert FundMe__NotOwner();
         _;
     }
 
@@ -40,7 +41,7 @@ contract FundMe {
      * private
      */
     constructor(address s_priceFeedAddress) {
-        s_owner = msg.sender;
+        i_owner = msg.sender;
         s_priceFeed = AggregatorV3Interface(s_priceFeedAddress);
     }
 
@@ -52,6 +53,7 @@ contract FundMe {
         fund();
     }
 
+    // gửi tiền vào ví deploy
     function fund() public payable {
         require(
             msg.value.getConversionRate(s_priceFeed) > MINIMUM_USD,
@@ -59,10 +61,6 @@ contract FundMe {
         );
         s_addressToAmountFunded[msg.sender] += msg.value;
         s_funders.push(msg.sender);
-    }
-
-    function getVersion() internal view returns (uint256) {
-        return s_priceFeed.version();
     }
 
     function withdraw() public onlyOwner {
@@ -79,6 +77,10 @@ contract FundMe {
             value: address(this).balance
         }("");
         require(callSuccess, "Call failed");
+    }
+
+    function getVersion() internal view returns (uint256) {
+        return s_priceFeed.version();
     }
 
     function cheaperWithdraw() public payable onlyOwner {

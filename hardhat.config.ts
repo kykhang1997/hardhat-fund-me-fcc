@@ -29,6 +29,7 @@ const config: HardhatUserConfig = {
 		hardhat: {
 			chainId: 31337,
 			// gasPrice: 130000000000,
+			allowUnlimitedContractSize: true,
 		},
 		sepolia: {
 			url: SEPOLIA_RPC_URL,
